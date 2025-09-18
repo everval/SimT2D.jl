@@ -17,7 +17,7 @@ Outputs:
 function generate_T2D_data(N::Int=30)
     all_data = DataFrame()
     all_events = DataFrame()
-    
+
     for i in 1:N
         df, events = simulate_cgm_t2d()
         df.subject = fill(i, nrow(df))       # Add subject ID to glucose data
@@ -25,7 +25,7 @@ function generate_T2D_data(N::Int=30)
         append!(all_data, df)
         append!(all_events, events)
     end
-    
+
     return all_data, all_events
 end
 
@@ -136,7 +136,7 @@ function simulate_cgm_t2d(; days=90, baseline=135.0, noise_std=10.0, rng=Random.
 
             # Simulate meal response
             carbs = base_carbs + rand(Normal(0, 25))
-            multiplier = rand(Truncated(Normal(1.1, 0.3), 0.6, 1.6)) # Insulin sensitivity multiplier
+            multiplier = rand(truncated(Normal(1.1, 0.3), 0.6, 1.6)) # Insulin sensitivity multiplier
             peak = insulin_sensitivity * multiplier * carbs # Peak glucose increase
             start_idx = day * minutes_per_day + meal_minute + jitter # Adjusted meal time with jitter
             delay = circadian_delay(meal_minute) # Circadian delay for meal response
@@ -157,8 +157,8 @@ function simulate_cgm_t2d(; days=90, baseline=135.0, noise_std=10.0, rng=Random.
         for _ in 1:rand(2:8) # Random number of snacks per day
             snack_minute = rand(480:1320) # Snack time between 8 AM and 10 PM
             delay = circadian_delay(snack_minute) # Circadian delay for snack response
-            carbs = rand(Truncated(Normal(25, 10), 10, 35)) # Random snack carbs
-            multiplier = rand(Truncated(Normal(0.45, 0.08), 0.3, 0.7)) # Insulin sensitivity multiplier for snacks
+            carbs = rand(truncated(Normal(25, 10), 10, 35)) # Random snack carbs
+            multiplier = rand(truncated(Normal(0.45, 0.08), 0.3, 0.7)) # Insulin sensitivity multiplier for snacks
             peak = insulin_sensitivity * multiplier * carbs # Peak glucose increase
             decay_tau = rand(Uniform(8, 20)) # Decay time constant for snack response
             idx = day * minutes_per_day + snack_minute # Snack index in total minutes
@@ -182,7 +182,7 @@ function simulate_cgm_t2d(; days=90, baseline=135.0, noise_std=10.0, rng=Random.
             tau = rand(Uniform(22.0, 40.0)) # Decay time constant for exercise response
 
             # Log exercise event
-            push!(event_log, (idx, "exercise", reduction, DateTime(2025, 1, 1) + Minute(idx))) 
+            push!(event_log, (idx, "exercise", reduction, DateTime(2025, 1, 1) + Minute(idx)))
             for t in 0:80
                 i = idx + t
                 if i <= total_minutes
@@ -201,7 +201,7 @@ function simulate_cgm_t2d(; days=90, baseline=135.0, noise_std=10.0, rng=Random.
 
             # Log nocturnal hypoglycemia event
             push!(event_log, (idx, "night_hypo_mild", dip, DateTime(2025, 1, 1) + Minute(idx)))
-            for t in 0:80 
+            for t in 0:80
                 i = idx + t
                 if i <= total_minutes
                     glucose[i] -= cgm_delay_kernel(t, delay, tau, dip)
@@ -220,7 +220,7 @@ function simulate_cgm_t2d(; days=90, baseline=135.0, noise_std=10.0, rng=Random.
 
             # Log severe nocturnal hypoglycemia event
             push!(event_log, (idx, "night_hypo_severe", dip, DateTime(2025, 1, 1) + Minute(idx)))
-            for t in 0:100 
+            for t in 0:100
                 i = idx + t
                 if i <= total_minutes
                     glucose[i] -= cgm_delay_kernel(t, delay, tau, dip, gain)

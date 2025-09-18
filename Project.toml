@@ -1,7 +1,7 @@
 name = "SimT2D"
 uuid = "a3ae81af-56a3-442d-870f-4d537fedbc5a"
-authors = ["everval <eduardo.vera@gmail.com> and contributors"]
-version = "0.0.1-DEV"
+authors = ["Tanja Bugajski <Tbugaj17> and Eduardo Vera-Valdés <everval>"]
+version = "0.1.0"
 
 [deps]
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
