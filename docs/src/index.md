@@ -21,9 +21,6 @@ It is designed for research, algorithm validation, and machine learning workflow
 - **Autoregulatory drift** toward baseline and **CGM-like sensor noise**  
 - **Event logs** for validation, plotting, and ML training  
 
-**Example: Simulated glucose trace for two subjects with annotated events (first 3 days)**  
-![Event plot: first 3 simulated days](../../event_plot_first3days.png)
-
 
 ## Installation
 
