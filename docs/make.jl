@@ -18,6 +18,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/everval/SimT2D.jl",
+    repo="github.com/everval/SimT2D.jl.git",
     devbranch="main",
 )
